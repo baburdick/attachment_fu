@@ -9,8 +9,10 @@ tutorial}[https://github.com/pothoven/attachment_fu/blob/master/TUTORIAL.rdoc].
 
 = rebuild
 I've decided rebuilt this gem into ss-attachment_fu so patch can be automatically updated when bundling
+
 How to install :
-`gem 'ss-attachment_fu'` and then `bundle install`
+
+<code>gem 'ss-attachment_fu'</code> and then <code>bundle install</code>
 
 = patch
 * Directly save to AWS S3 based on Zoo configuration
