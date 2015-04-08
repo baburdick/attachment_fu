@@ -1,3 +1,10 @@
+* Apr 8, 2015 *
+* Parameter resize_to can receive a symbol which is can be an instance method of class
+* Rebuild gem into ss-attachment_fu
+
+* Apr 7, 2015 *
+* Directly save to AWS S3 based on Zoo configuration
+
 * Jan 27, 2015 *
 * Pull in changes from bacrossland to fix test suite *
 
