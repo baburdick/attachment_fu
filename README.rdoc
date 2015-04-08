@@ -9,6 +9,7 @@ tutorial}[https://github.com/pothoven/attachment_fu/blob/master/TUTORIAL.rdoc].
 
 = patch
 * Directly save to AWS S3 based on Zoo configuration
+* Parameter resize_to can receive a symbol which is can be an instance method of class
 
 = attachment_fu functionality
 
