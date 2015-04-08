@@ -7,6 +7,9 @@ http://techno-weenie.net) and is the successor to acts_as_attachment. To get a
 basic run-through of its capabilities, check out {Mike Clark's
 tutorial}[https://github.com/pothoven/attachment_fu/blob/master/TUTORIAL.rdoc].
 
+= patch
+* Directly save to AWS S3 based on Zoo configuration
+
 = attachment_fu functionality
 
 attachment_fu facilitates file uploads in Ruby on Rails. There are a few
