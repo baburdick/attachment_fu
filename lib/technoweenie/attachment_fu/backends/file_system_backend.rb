@@ -105,16 +105,47 @@ module Technoweenie # :nodoc:
             true
           end
 
-          # Saves the file to the file system
+          # Zoo Patch : Override saves the file into AWS directly
           def save_to_storage
             if save_attachment?
-              # TODO: This overwrites the file if it exists, maybe have an allow_overwrite option?
-              FileUtils.mkdir_p(File.dirname(full_filename))
-              FileUtils.cp(temp_path, full_filename)
-              FileUtils.chmod(attachment_options[:chmod] || 0644, full_filename)
+              # This overwrites the file if it exists, maybe have an allow_overwrite option?
+              uploaded = save_to_s3
+              try = 0
+              while try < 5 && !uploaded
+                try = try + 1
+                uploaded = save_to_s3
+                sleep(5)
+              end
             end
             @old_filename = nil
             true
+          end
+
+          def save_to_s3
+            s3_filename = Digest::SHA1.hexdigest(full_filename.gsub(%r(^#{Regexp.escape(base_path)}), ''))
+            img = self
+            if !img.blank?
+              if !img.moved_to_s3
+                begin
+                  AWS::S3::DEFAULT_HOST.replace AWS_BUCKET_DEFAULT_HOST
+                  AWS::S3::Base.establish_connection!(
+                     :access_key_id     => AWS_BUCKET_ACCESS_ID_KEY,
+                     :secret_access_key => AWS_BUCKET_SECRET_ACCESS_KEY
+                  )
+                  AWS::S3::S3Object.store(
+                    s3_filename,
+                    open(temp_path),
+                    AWS_BUCKET_NAME,
+                    :access => :public_read,
+                    :content_type => img.content_type
+                  )
+                  img.update_attribute(:moved_to_s3,1)
+                  return true
+                rescue Exception => ex #Errno::ENOENT
+                  return false
+                end
+              end
+            end 
           end
 
           def current_data
