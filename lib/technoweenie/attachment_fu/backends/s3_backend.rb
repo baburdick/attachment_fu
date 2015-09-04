@@ -247,20 +247,20 @@ module Technoweenie # :nodoc:
 
         # The attachment ID used in the full path of a file
         def attachment_path_id
-          ((respond_to?(:parent_id) && parent_id) || id).to_s
+          ((respond_to?(:parent_id) && parent_id) || id)
         end
 
         # The pseudo hierarchy containing the file relative to the bucket name
         # Example: <tt>:table_name/:id</tt>
         def base_path(thumbnail = nil)
           file_system_path = (thumbnail ? thumbnail_class : self).attachment_options[:path_prefix]
-          File.join(file_system_path, *partitioned_path(attachment_path_id))
+          file_system_path
         end
 
         # The full path to the file relative to the bucket name
         # Example: <tt>:table_name/:id/:filename</tt>
         def full_filename(thumbnail = nil)
-          File.join(base_path(thumbnail), thumbnail_name_for(thumbnail))
+          File.join(base_path(thumbnail), *partitioned_path(thumbnail_name_for(thumbnail)))
         end
 
         # All public objects are accessible via a GET request to the S3 servers. You can generate a
