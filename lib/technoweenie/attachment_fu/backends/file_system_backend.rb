@@ -108,14 +108,7 @@ module Technoweenie # :nodoc:
           # Zoo Patch : Override saves the file into AWS directly
           def save_to_storage
             if save_attachment?
-              # This overwrites the file if it exists, maybe have an allow_overwrite option?
-              uploaded = save_to_s3
-              try = 0
-              while try < 5 && !uploaded
-                try = try + 1
-                uploaded = save_to_s3
-                sleep(5)
-              end
+              save_to_s3
             end
             @old_filename = nil
             true
