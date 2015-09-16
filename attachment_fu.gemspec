@@ -8,7 +8,7 @@ Gem::Specification.new do |s|
   s.email			  = %q{m.yunan.helmy@gmail.com}
   s.homepage		  = %q{https://github.com/yunanhelmy/attachment_fu}
   s.version			  = "3.4.0"
-  s.date			  = %q{2015-09-15}
+  s.date			  = %q{2015-09-16}
 
   s.files			  = Dir.glob("{lib,vendor}/**/*") + %w( CHANGELOG LICENSE README.rdoc amazon_s3.yml.tpl rackspace_cloudfiles.yml.tpl )
   s.extra_rdoc_files  = ["README.rdoc"]
