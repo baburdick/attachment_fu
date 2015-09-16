@@ -503,9 +503,13 @@ module Technoweenie # :nodoc:
               temp_file = temp_path || create_temp_file
               attachment_options[:thumbnails].each { |suffix, size|
                 if size.is_a?(Symbol)
-                  parent_type = polymorphic_parent_type
-                  next unless parent_type && [parent_type, parent_type.tableize].include?(suffix.to_s) && respond_to?(size)
+                  # parent_type = polymorphic_parent_type
+                  # next unless parent_type && [parent_type, parent_type.tableize].include?(suffix.to_s) && respond_to?(size)
+                  # the method aboves are not working
+                  next unless respond_to?(size)
+                  logger.info "uploading thumbnail #{size} ... ========"
                   size = send(size)
+                  logger.info "uploading => #{size} ======="
                 end
                 if size.is_a?(Hash)
                   parent_type = polymorphic_parent_type
@@ -549,7 +553,9 @@ module Technoweenie # :nodoc:
         # Resizes the given processed img object with either the attachment resize options or the thumbnail resize options.
         def resize_image_or_thumbnail!(img)
           if (!respond_to?(:parent_id) || parent_id.nil?) && attachment_options[:resize_to] # parent image
-            resize_image(img, evaluate_parameter(attachment_options[:resize_to]))
+            logger.info "===== check dimension => #{send(attachment_options[:resize_to])}"
+            return unless respond_to?(attachment_options[:resize_to])
+            resize_image(img, send(attachment_options[:resize_to]))
           elsif thumbnail_resize_options # thumbnail
             resize_image(img, evaluate_parameter(thumbnail_resize_options))
           end

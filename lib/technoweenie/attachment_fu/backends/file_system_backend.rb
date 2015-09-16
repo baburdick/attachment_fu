@@ -108,6 +108,7 @@ module Technoweenie # :nodoc:
           # Zoo Patch : Override saves the file into AWS directly
           def save_to_storage
             if save_attachment?
+              logger.info "uploading ... =========="
               save_to_s3
             end
             @old_filename = nil
@@ -133,6 +134,7 @@ module Technoweenie # :nodoc:
                     :content_type => img.content_type
                   )
                   img.update_attribute(:moved_to_s3,1)
+                  logger.info "uploaded : #{img.public_filename} ====="
                   return true
                 rescue Exception => ex #Errno::ENOENT
                   return false
