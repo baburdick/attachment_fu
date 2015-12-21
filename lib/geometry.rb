@@ -3,12 +3,15 @@
 # Used so I can use spiffy RMagick geometry strings with ImageScience
 class Geometry
   # @ is removed until support for them is added
-  FLAGS = ['', '%', '<', '>', '!']#, '@']
+  FLAGS = ['', '%', '<', '>', '!', 'g', 'c']#, '@']
   RFLAGS = { '%' => :percent,
              '!' => :aspect,
              '<' => :>,
              '>' => :<,
-             '@' => :area }
+             '@' => :area,
+             'g' => :cropped_greyscale,
+             'c' => :crop_user_defined
+           }
 
   attr_accessor :width, :height, :x, :y, :flag
 
@@ -25,7 +28,7 @@ class Geometry
   end
 
   # Construct an object from a geometry string
-  RE = /\A(\d*)(?:x(\d+)?)?([-+]\d+)?([-+]\d+)?([%!<>@]?)\Z/
+  RE = /\A(\d*)(?:x(\d+)?)?([-+]\d+)?([-+]\d+)?([%!<>@gc]?)\Z/
 
   def self.from_s(str)
     raise(ArgumentError, "no geometry string specified") unless str
@@ -60,6 +63,12 @@ class Geometry
         new_width    = scale_x.to_f * (orig_width.to_f  / 100.0)
         new_height   = scale_y.to_f * (orig_height.to_f / 100.0)
       when :aspect
+        new_width = @width unless @width.nil?
+        new_height = @height unless @height.nil?
+      when :cropped_greyscale
+        new_width = @width unless @width.nil?
+        new_height = @height unless @height.nil?
+      when :crop_user_defined
         new_width = @width unless @width.nil?
         new_height = @height unless @height.nil?
       when :<, :>, nil
