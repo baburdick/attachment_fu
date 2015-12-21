@@ -60,7 +60,49 @@ module Technoweenie # :nodoc:
               end
             else
               new_size = [img.width, img.height] / size.to_s
-              if size.ends_with?('!')
+              if size.ends_with? "c"
+                aspect = new_size[0].to_f / new_size[1].to_f
+                ih, iw = img.height, img.width
+                width, height = (ih * aspect), (iw / aspect)
+                                
+                width = [iw, width].min.to_i
+                height = [ih, height].min.to_i
+                                
+                unless (model.nil? or model.x1.nil? or model.x2.nil? or model.y2.nil? or model.y1.nil? or model.big_width.nil? or model.big_height.nil? or model.height.nil? or model.width.nil?)
+                  left = (model.x1.to_f / model.big_width) * model.width
+                  right = (model.x2.to_f / model.big_width) * model.width
+                  top = (model.y2.to_f / model.big_height) * model.height
+                  bottom = (model.y1.to_f / model.big_height) * model.height
+                else
+                  left = (iw-width)/2
+                  top = (ih-height)/2
+                  right = (iw+width)/2
+                  bottom = (ih+height)/2
+                end
+                                
+                #( (iw-w)/2, (ih-h)/2, (iw+w)/2, (ih+h)/2) { |crop| crop.resize(new_size[0], new_size[1], &grab_dimensions ) }
+                img.with_crop(left.to_i, top.to_i, right.to_i, bottom.to_i) { |crop| crop.thumbnail(new_size, false, &grab_dimensions) }
+              elsif size.ends_with? "g"
+                aspect = new_size[0].to_f / new_size[1].to_f
+                ih, iw = img.height, img.width
+                w, h = (ih * aspect), (iw / aspect)
+                w = [iw, w].min.to_i
+                h = [ih, h].min.to_i
+                
+                unless (model.nil? or model.x1.nil? or model.x2.nil? or model.y2.nil? or model.y1.nil? or model.big_width.nil? or model.big_height.nil? or model.height.nil? or model.width.nil?)
+                  left = (model.x1.to_f / model.big_width) * model.width
+                  right = (model.x2.to_f / model.big_width) * model.width
+                  top = (model.y2.to_f / model.big_height) * model.height
+                  bottom = (model.y1.to_f / model.big_height) * model.height
+                else
+                  left = (iw-w)/2
+                  top = (ih-h)/2
+                  right = (iw+w)/2
+                  bottom = (ih+h)/2
+                end
+                
+                img.with_crop(left.to_i, top.to_i, right.to_i, bottom.to_i) { |crop| crop.thumbnail(new_size, true, &grab_dimensions) }
+              elsif size.ends_with? "!"
                 aspect = new_size[0].to_f / new_size[1].to_f
                 ih, iw = img.height, img.width
                 w, h = (ih * aspect), (iw / aspect)
@@ -70,7 +112,7 @@ module Technoweenie # :nodoc:
                   crop.resize(new_size[0], new_size[1], &grab_dimensions)
                 }
               else
-                img.resize(new_size[0], new_size[1], &grab_dimensions)
+                img.thumbnail(new_size, false, &grab_dimensions)
               end
             end
           end
