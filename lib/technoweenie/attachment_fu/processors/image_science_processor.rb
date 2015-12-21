@@ -56,7 +56,7 @@ module Technoweenie # :nodoc:
               if size.is_a?(Fixnum)
                 img.thumbnail(size, &grab_dimensions)
               else
-                img.resize(size[0], size[1], false, &grab_dimensions)
+                img.resize(size[0], size[1], 0, &grab_dimensions)
               end
             else
               new_size = [img.width, img.height] / size.to_s
@@ -109,7 +109,7 @@ module Technoweenie # :nodoc:
                 w = [iw, w].min.to_i
                 h = [ih, h].min.to_i
                 img.with_crop((iw-w)/2, (ih-h)/2, (iw+w)/2, (ih+h)/2) { |crop|
-                  crop.resize(new_size[0], new_size[1], false, &grab_dimensions)
+                  crop.resize(new_size[0], new_size[1], 0, &grab_dimensions)
                 }
               else
                 img.thumbnail(new_size, false, &grab_dimensions)
