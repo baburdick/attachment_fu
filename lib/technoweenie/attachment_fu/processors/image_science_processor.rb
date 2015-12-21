@@ -26,7 +26,7 @@ module Technoweenie # :nodoc:
           end
 
           # Performs the actual resizing operation for a thumbnail
-          def resize_image(img, size)
+          def resize_image(img, size, model)
             # create a dummy temp file to write to
             # ImageScience doesn't handle all gifs properly, so it converts them to
             # pngs for thumbnails.  It has something to do with trying to save gifs
