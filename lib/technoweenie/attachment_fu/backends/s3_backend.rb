@@ -198,11 +198,15 @@ module Technoweenie # :nodoc:
           end
           base.class_eval(eval_string, __FILE__, __LINE__)
 
-          Base.establish_connection!(s3_config.slice(:access_key_id, :secret_access_key, :upload_server, :port, :use_ssl, :persistent, :proxy))
+          Base.establish_connection!(s3_config.slice(:access_key_id, :secret_access_key, :port, :use_ssl, :persistent, :proxy).merge(:server => upload_server))
 
           # Bucket.create(@@bucket_name)
 
           base.before_update :rename_file
+        end
+        
+        def self.upload_server
+          @upload_server ||= s3_config[:upload_server] || self.hostname
         end
         
         def self.protocol
