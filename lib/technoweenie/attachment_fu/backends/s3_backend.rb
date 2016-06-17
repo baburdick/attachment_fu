@@ -198,13 +198,13 @@ module Technoweenie # :nodoc:
           end
           base.class_eval(eval_string, __FILE__, __LINE__)
 
-          Base.establish_connection!(s3_config.slice(:access_key_id, :secret_access_key, :server, :port, :use_ssl, :persistent, :proxy))
+          Base.establish_connection!(s3_config.slice(:access_key_id, :secret_access_key, :upload_server, :port, :use_ssl, :persistent, :proxy))
 
           # Bucket.create(@@bucket_name)
 
           base.before_update :rename_file
         end
-
+        
         def self.protocol
           @protocol ||= s3_config[:use_ssl] ? 'https://' : 'http://'
         end
