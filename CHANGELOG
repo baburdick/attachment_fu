@@ -1,3 +1,6 @@
+* July 2, 2016 *
+* Patch for id longer or equal than 9*
+
 * Sept 16, 2015*
 * Add logger.info *
 * Fix upload thumbnails*
