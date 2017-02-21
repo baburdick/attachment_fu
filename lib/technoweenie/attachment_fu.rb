@@ -555,6 +555,7 @@ module Technoweenie # :nodoc:
           if (!respond_to?(:parent_id) || parent_id.nil?) && attachment_options[:resize_to] # parent image
             logger.info "===== check dimension => #{send(attachment_options[:resize_to])}"
             return unless respond_to?(attachment_options[:resize_to])
+
             # resize_image(img, send(attachment_options[:resize_to]))
             resize_image(img, evaluate_parameter(attachment_options[:resize_to]))
           elsif thumbnail_resize_options # thumbnail
