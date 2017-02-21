@@ -501,6 +501,16 @@ module Technoweenie # :nodoc:
           if @saved_attachment
             if respond_to?(:process_attachment_with_processing, true) && thumbnailable? && !attachment_options[:thumbnails].blank? && parent_id.nil?
               temp_file = temp_path || create_temp_file
+
+              if self.attachable_type == "Property" && self.type == "Image"
+                if self.watermark.present?
+                  wmark = self.watermark
+                  image_file_ori = Magick::Image::read(temp_file).first
+                  image_file_ori = image_file_ori.watermark(Magick::Image.read(wmark).first, 0.25, 1.0, Magick::SouthEastGravity)
+                  image_file_ori.write(temp_file)
+                end
+              end
+
               attachment_options[:thumbnails].each { |suffix, size|
                 if size.is_a?(Symbol)
                   # parent_type = polymorphic_parent_type
