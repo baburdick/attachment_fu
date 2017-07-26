@@ -436,8 +436,8 @@ module Technoweenie # :nodoc:
         # Write out the temporary data if it is not present
         if temp_data.nil?
           self.temp_data = current_data
-        end 
-        
+        end
+
         self.class.with_image(temp_path, &block)
       end
 
@@ -471,7 +471,7 @@ module Technoweenie # :nodoc:
           [:size, :content_type].each do |attr_name|
             enum = attachment_options[attr_name]
             if Object.const_defined?(:I18n) # Rails >= 2.2
-              errors.add attr_name, I18n.translate("activerecord.errors.messages.inclusion", attr_name => enum) unless enum.nil? || enum.include?(send(attr_name))
+              errors.add attr_name, I18n.translate("errors.messages.inclusion", attr_name => enum) unless enum.nil? || enum.include?(send(attr_name))
             else
               errors.add attr_name, ActiveRecord::Errors.default_error_messages[:inclusion] unless enum.nil? || enum.include?(send(attr_name))
             end
@@ -531,7 +531,15 @@ module Technoweenie # :nodoc:
                   create_or_update_thumbnail(temp_file, suffix, *size)
                 end
               }
+
+              # Generate large image
+              if self.attachable_type = "Property" && self.type == "Image"
+                image_file_ori = Magick::Image::read(temp_file).first
+                image_file_ori.resize!(800)
+                image_file_ori.write(temp_file)
+              end
             end
+
             save_to_storage
             @temp_paths.clear
             @saved_attachment = nil
@@ -550,9 +558,9 @@ module Technoweenie # :nodoc:
           return param if param.is_a?(String)
 
           return param if param.is_a?(Array) && param.length > 1
-                
+
           param = param[0] if param.is_a?(Array)
-                
+
           if param.is_a?(Symbol) && self.respond_to?(param)
             self.send param
           else
