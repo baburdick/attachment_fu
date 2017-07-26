@@ -471,7 +471,7 @@ module Technoweenie # :nodoc:
           [:size, :content_type].each do |attr_name|
             enum = attachment_options[attr_name]
             if Object.const_defined?(:I18n) # Rails >= 2.2
-              errors.add attr_name, I18n.translate("activerecord.errors.messages.inclusion", attr_name => enum) unless enum.nil? || enum.include?(send(attr_name))
+              errors.add attr_name, I18n.translate("errors.messages.inclusion", attr_name => enum) unless enum.nil? || enum.include?(send(attr_name))
             else
               errors.add attr_name, ActiveRecord::Errors.default_error_messages[:inclusion] unless enum.nil? || enum.include?(send(attr_name))
             end
