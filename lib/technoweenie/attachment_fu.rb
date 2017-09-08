@@ -436,8 +436,8 @@ module Technoweenie # :nodoc:
         # Write out the temporary data if it is not present
         if temp_data.nil?
           self.temp_data = current_data
-        end 
-        
+        end
+
         self.class.with_image(temp_path, &block)
       end
 
@@ -531,7 +531,17 @@ module Technoweenie # :nodoc:
                   create_or_update_thumbnail(temp_file, suffix, *size)
                 end
               }
+
+              # Generate large image
+              if self.attachable_type == "Property" && self.type == "Image"
+                image_file_ori = Magick::Image::read(temp_file).first
+                ori_large = Array.new(2)
+                ori_large[0] = 800
+                ori_large[1] = image_file_ori.rows / (image_file_ori.columns/800.to_f)
+                resize_image(image_file_ori, ori_large)
+              end
             end
+
             save_to_storage
             @temp_paths.clear
             @saved_attachment = nil
@@ -550,9 +560,9 @@ module Technoweenie # :nodoc:
           return param if param.is_a?(String)
 
           return param if param.is_a?(Array) && param.length > 1
-                
+
           param = param[0] if param.is_a?(Array)
-                
+
           if param.is_a?(Symbol) && self.respond_to?(param)
             self.send param
           else
