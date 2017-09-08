@@ -533,10 +533,12 @@ module Technoweenie # :nodoc:
               }
 
               # Generate large image
-              if self.attachable_type = "Property" && self.type == "Image"
+              if self.attachable_type == "Property" && self.type == "Image"
                 image_file_ori = Magick::Image::read(temp_file).first
-                image_file_ori.resize!(800)
-                image_file_ori.write(temp_file)
+                ori_large = Array.new(2)
+                ori_large[0] = 800
+                ori_large[1] = image_file_ori.rows / (image_file_ori.columns/800.to_f)
+                resize_image(image_file_ori, ori_large)
               end
             end
 
