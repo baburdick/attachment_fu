@@ -7,7 +7,7 @@ Gem::Specification.new do |s|
   s.description		  = %q{This is a fork of Steven Pothoven's attachment_fu including custom some enhancements for Zoo Property}
   s.email			  = %q{m.yunan.helmy@gmail.com}
   s.homepage		  = %q{https://github.com/yunanhelmy/attachment_fu}
-  s.version			  = "3.4.5"
+  s.version			  = "3.4.6"
   s.date			  = %q{2015-09-16}
 
   s.files			  = Dir.glob("{lib,vendor}/**/*") + %w( CHANGELOG LICENSE README.rdoc amazon_s3.yml.tpl rackspace_cloudfiles.yml.tpl )

@@ -525,9 +525,17 @@ module Technoweenie # :nodoc:
                   parent_type = polymorphic_parent_type
                   next unless parent_type && [parent_type, parent_type.tableize].include?(suffix.to_s)
                   size.each { |ppt_suffix, ppt_size|
+                    logger.info "[DATA 1] #{self.to_json}"
                     create_or_update_thumbnail(temp_file, ppt_suffix, *ppt_size)
                   }
                 else
+                  logger.info "[DATA 2] #{self.to_json}"
+                  if type == "Image" && attachable_type == "Property" && suffix.to_s == "hd"
+                    if width < 1920 || height < 1080
+                      logger.info "[NOTICE] HD image creation has been skipped."
+                      next
+                    end
+                  end
                   create_or_update_thumbnail(temp_file, suffix, *size)
                 end
               }
