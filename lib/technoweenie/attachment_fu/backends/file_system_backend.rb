@@ -59,7 +59,7 @@ module Technoweenie # :nodoc:
               # Primary key is an integer. Split it after padding it with 0.
               if path_id.to_s.length <= 8
                 ("%08d" % path_id).scan(/..../) + args
-              else 
+              else
                 id = path_id.to_s
                 [id.chomp(id[id.length - 4,id.length]),id[id.length - 4,id.length]] + args
               end
@@ -113,8 +113,9 @@ module Technoweenie # :nodoc:
           # Zoo Patch : Override saves the file into AWS directly
           def save_to_storage
             if save_attachment?
-              logger.info "uploading ... =========="
-              save_to_s3
+              logger.error "uploading ... =========="
+              is_saved = save_to_s3
+              logger.error "===== is saved??? === #{is_saved} =============="
             end
             @old_filename = nil
             true
@@ -139,13 +140,13 @@ module Technoweenie # :nodoc:
                     :content_type => img.content_type
                   )
                   img.update_attribute(:moved_to_s3,1)
-                  logger.info "uploaded : #{img.public_filename} ====="
+                  logger.error "uploaded : #{img.public_filename} ====="
                   return true
                 rescue Exception => ex #Errno::ENOENT
                   return false
                 end
               end
-            end 
+            end
           end
 
           def current_data

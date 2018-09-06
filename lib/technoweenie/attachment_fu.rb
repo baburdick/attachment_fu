@@ -549,8 +549,10 @@ module Technoweenie # :nodoc:
                 resize_image(image_file_ori, ori_large)
               end
             end
-
-            save_to_storage
+            logger.error "===============start===================== "
+            is_saved = save_to_storage
+            logger.error "===== is saved? === #{is_saved} =============="
+            logger.error "===============end===================== "
             @temp_paths.clear
             @saved_attachment = nil
             #callback :after_attachment_saved
