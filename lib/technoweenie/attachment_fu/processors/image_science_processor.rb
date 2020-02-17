@@ -112,7 +112,7 @@ module Technoweenie # :nodoc:
                   crop.resize(new_size[0], new_size[1], 0, &grab_dimensions)
                 }
               else
-                img.thumbnail(new_size, false, &grab_dimensions)
+                img.resize(new_size[0], new_size[1], 0, &grab_dimensions)
               end
             end
           end
