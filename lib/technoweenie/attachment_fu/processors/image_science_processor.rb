@@ -5,7 +5,8 @@ module Technoweenie # :nodoc:
       module ImageScienceProcessor
         def self.included(base)
           base.send :extend, ClassMethods
-          base.alias_method_chain :process_attachment, :processing
+          base.alias_method :process_attachment_without_processing, :process_attachment
+          base.alias_method :process_attachment, :process_attachment_with_processing
         end
 
         module ClassMethods
@@ -52,8 +53,8 @@ module Technoweenie # :nodoc:
             end
 
             size = size.first if size.is_a?(Array) && size.length == 1
-            if size.is_a?(Fixnum) || (size.is_a?(Array) && size.first.is_a?(Fixnum))
-              if size.is_a?(Fixnum)
+            if size.is_a?(Integer) || (size.is_a?(Array) && size.first.is_a?(Integer))
+              if size.is_a?(Integer)
                 img.thumbnail(size, &grab_dimensions)
               else
                 img.resize(size[0], size[1], 0, &grab_dimensions)
