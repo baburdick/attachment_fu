@@ -127,18 +127,32 @@ module Technoweenie # :nodoc:
             if !img.blank?
               if !img.moved_to_s3
                 begin
-                  AWS::S3::DEFAULT_HOST.replace AWS_BUCKET_DEFAULT_HOST
-                  AWS::S3::Base.establish_connection!(
-                     :access_key_id     => AWS_BUCKET_ACCESS_ID_KEY,
-                     :secret_access_key => AWS_BUCKET_SECRET_ACCESS_KEY
-                  )
-                  AWS::S3::S3Object.store(
-                    s3_filename,
-                    open(temp_path),
-                    AWS_BUCKET_NAME,
-                    :access => :public_read,
-                    :content_type => img.content_type
-                  )
+                  Aws.config.update({
+                    region: AWS_REGION,
+                    credentials: Aws::Credentials.new(AWS_BUCKET_ACCESS_ID_KEY, AWS_BUCKET_SECRET_ACCESS_KEY)
+                  })
+
+                  s3 = Aws::S3::Resource.new
+                  obj = s3.bucket(AWS_BUCKET_NAME).object(s3_filename)
+                  obj.put({
+                      acl: 'public-read',
+                      body: open(temp_path),
+                      content_type: img.content_type 
+                  })
+
+                  # AWS::S3::DEFAULT_HOST.replace AWS_BUCKET_DEFAULT_HOST
+                  # AWS::S3::Base.establish_connection!(
+                  #    :access_key_id     => AWS_BUCKET_ACCESS_ID_KEY,
+                  #    :secret_access_key => AWS_BUCKET_SECRET_ACCESS_KEY
+                  # )
+                  # AWS::S3::S3Object.store(
+                  #   s3_filename,
+                  #   open(temp_path),
+                  #   AWS_BUCKET_NAME,
+                  #   :access => :public_read,
+                  #   :content_type => img.content_type
+                  # )
+
                   img.update_attribute(:moved_to_s3,1)
                   logger.error "uploaded : #{img.public_filename} ====="
                   return true
