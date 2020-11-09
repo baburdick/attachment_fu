@@ -129,7 +129,9 @@ module Technoweenie # :nodoc:
                 begin
                   Aws.config.update({
                     region: AWS_REGION,
-                    credentials: Aws::Credentials.new(AWS_BUCKET_ACCESS_ID_KEY, AWS_BUCKET_SECRET_ACCESS_KEY)
+                    credentials: Aws::Credentials.new(AWS_BUCKET_ACCESS_ID_KEY, AWS_BUCKET_SECRET_ACCESS_KEY),
+                    http_open_timeout: 5, 
+                    http_read_timeout: 20,
                   })
 
                   s3 = Aws::S3::Resource.new
