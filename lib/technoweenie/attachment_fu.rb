@@ -502,7 +502,7 @@ module Technoweenie # :nodoc:
             if respond_to?(:process_attachment_with_processing, true) && thumbnailable? && !attachment_options[:thumbnails].blank? && parent_id.nil?
               temp_file = temp_path || create_temp_file
 
-              if self.attachable_type == "Property" && self.type == "Image"
+              if self.type == "Image" #&& self.attachable_type == "Property"
                 if self.watermark.present?
                   wmark = self.watermark
                   image_file_ori = Magick::Image::read(temp_file).first
@@ -530,7 +530,7 @@ module Technoweenie # :nodoc:
                   }
                 else
                   logger.info "[DATA 2] #{self.to_json}"
-                  if type == "Image" && attachable_type == "Property" && suffix.to_s == "hd"
+                  if type == "Image" && suffix.to_s == "hd"# && attachable_type == "Property"
                     if width < 1920 || height < 1080
                       logger.info "[NOTICE] HD image creation has been skipped."
                       next
@@ -541,7 +541,7 @@ module Technoweenie # :nodoc:
               }
 
               # Generate large image
-              if self.attachable_type == "Property" && self.type == "Image"
+              if self.type == "Image" # && self.attachable_type == "Property"
                 image_file_ori = Magick::Image::read(temp_file).first
                 ori_large = Array.new(2)
                 ori_large[0] = 800
