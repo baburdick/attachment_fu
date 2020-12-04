@@ -583,8 +583,8 @@ module Technoweenie # :nodoc:
         # Resizes the given processed img object with either the attachment resize options or the thumbnail resize options.
         def resize_image_or_thumbnail!(img)
           if (!respond_to?(:parent_id) || parent_id.nil?) && attachment_options[:resize_to] # parent image
-            logger.info "===== check dimension => #{send(attachment_options[:resize_to])}"
-            return unless respond_to?(attachment_options[:resize_to])
+            logger.info "===== check dimension => #{attachment_options[:resize_to].inspect}"
+            #return unless respond_to?(attachment_options[:resize_to])
 
             # resize_image(img, send(attachment_options[:resize_to]))
             resize_image(img, evaluate_parameter(attachment_options[:resize_to]))
